@@ -1,0 +1,29 @@
+{
+  "name": "solco",
+  "version": "0.0.1",
+  "description": "Solidity smart contracts utility",
+  "main": "index.js",
+  "scripts": {},
+  "bin": {
+    "solco": "./index.js"
+  },
+  "keywords": [
+    "solidity",
+    "ethereum",
+    "smart",
+    "contracts",
+    "utility"
+  ],
+  "author": "AlexanderC",
+  "epilog": "Made w/ ❤ by AlexanderC <alexander.moldova@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^2.3.0",
+    "debug": "^3.1.0",
+    "fs-extra": "^5.0.0",
+    "resolve-from": "^4.0.0",
+    "solidity-parser": "^0.4.0",
+    "treeify": "^1.0.1",
+    "yargs": "^10.1.1"
+  }
+}
