@@ -20,3 +20,10 @@ Combine contracts:
 ```bash
 solco combine ./contracts/AwesomeToken.sol
 ```
+
+## Roadmap:
+
+- [ ] Add logo and badges
+- [ ] Write tests
+- [ ] Add more commands
+- [ ] Add more documentation 
