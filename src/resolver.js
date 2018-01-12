@@ -16,7 +16,7 @@ class Resolver {
       skip.push(file);
 
       const imports = (SolidityParser.parseFile(file, 'imports') || [])
-        .map(x => this._normalizeDependency(file, x));
+        .map(x => Resolver.resolveDependency(file, x));
 
       if (!recursive) {
         return Promise.resolve(imports);
@@ -29,12 +29,12 @@ class Resolver {
     }
   }
 
-  _normalizeDependency(file, dependency) {
+  static resolveDependency(sourceFile, dependency) {
     try {
-      return resolveFrom(path.dirname(file), dependency);
+      return resolveFrom(path.dirname(sourceFile), dependency);
     } catch (error) {
       throw new Error(
-        `(in ${ file })\n  Unable to resolve '${ dependency }' dependency`
+        `(in ${ sourceFile })\n  Unable to resolve '${ dependency }' dependency`
       );
     }
   }

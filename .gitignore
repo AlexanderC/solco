@@ -1,5 +1,7 @@
 report.txt
 report.json
+*viz.dot
+*viz.png
 
 # Created by https://www.gitignore.io/api/yeoman,node,webstorm,visualstudiocode,mean,macos,linux
 

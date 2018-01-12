@@ -7,6 +7,10 @@
   "bin": {
     "solco": "./index.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AlexanderC/solco.git"
+  },
   "keywords": [
     "solidity",
     "ethereum",
@@ -21,9 +25,34 @@
     "chalk": "^2.3.0",
     "debug": "^3.1.0",
     "fs-extra": "^5.0.0",
+    "graphviz2svg": "^0.2.0",
+    "ora": "^1.3.0",
     "resolve-from": "^4.0.0",
+    "solc": "^0.4.19",
+    "solgraph": "git+https://github.com/AlexanderC/solgraph.git",
     "solidity-parser": "^0.4.0",
+    "solium": "^1.1.2",
     "treeify": "^1.0.1",
     "yargs": "^10.1.1"
+  },
+  "solium": {
+    "extends": "solium:all",
+    "plugins": [
+      "security"
+    ],
+    "rules": {
+      "quotes": [
+        "error",
+        "double"
+      ],
+      "indentation": [
+        "error",
+        4
+      ],
+      "arg-overflow": [
+        "warning",
+        3
+      ]
+    }
   }
 }

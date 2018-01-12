@@ -36,7 +36,9 @@ class Combine {
           out += '/**\n';
           out += ` * Extracted from ${ contracts[i] }\n *\n`;
           out += Object.keys(this.metadata)
-            .map(k => ` * @${ k }\t${ this.metadata[k] }`).join('\n');
+              .map(k => ` * @${ k }\t${ this.metadata[k] }`)
+              .join('\n');          
+          out = out.trim();
           out += '\n */\n\n';
           out += contents[i];
           out += '\n\n';
