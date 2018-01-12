@@ -14,6 +14,8 @@ const Analyze = require('./src/analyze');
 const ora = require('ora');
 const Visualize = require('./src/visualize');
 const graphviz2svg = require('graphviz2svg');
+const open = require('open');
+const pify = require('pify');
 
 yargs
   .command({
@@ -28,8 +30,12 @@ yargs
           default: false,
           type: 'boolean',
         })
+        .option('open', {
+          describe: 'Open diagram after completed',
+          default: false,
+          type: 'boolean',
+        })
         .option('raw', {
-          alias: 'r',
           describe: 'Export raw DOT content',
           default: false,
           type: 'boolean',
@@ -91,7 +97,8 @@ yargs
 
           Debug.context('Usage')(`open -a Safari ${ outFile }`);
 
-          return fs.writeFile(outFile, svg);
+          return fs.writeFile(outFile, svg)
+            .then(() => true ? pify(open)(outFile) : Promise.resolve());
         });
     },
   })
