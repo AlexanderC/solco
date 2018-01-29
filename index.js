@@ -98,7 +98,7 @@ yargs
           Debug.context('Usage')(`open -a Safari ${ outFile }`);
 
           return fs.writeFile(outFile, svg)
-            .then(() => true ? pify(open)(outFile) : Promise.resolve());
+            .then(() => argv.open ? pify(open)(outFile) : Promise.resolve());
         });
     },
   })
