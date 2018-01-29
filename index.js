@@ -6,6 +6,7 @@ const path = require('path');
 const yargs = require('yargs');
 const chalk = require('chalk');
 const Resolver = require('./src/resolver');
+const Profile = require('./src/profile');
 const Debug = require('./src/debug');
 const Combine = require('./src/combine');
 const pkg = require('./package.json');
@@ -232,6 +233,75 @@ yargs
           console.info(chalk.green(
             `Successfully written ${ new Buffer(data).length } bytes into '${ outFile }'`
           ));
+        });
+    },
+  })
+  .command({
+    command: 'profile <contract>',
+    aliases: [ 'prof', 'pr' ],
+    desc: 'Profile a smart contract',
+    builder: yargs => {
+      return yargs
+        .option('recursive', {
+          alias: 'r',
+          describe: 'Profile contract dependencies',
+          default: false,
+          type: 'boolean',
+        })
+        .option('output', {
+          alias: 'o',
+          normalize: true,
+          describe: 'Specify output file',
+        })
+        .positional('contract', {
+          describe: 'Path to the contract file',
+          normalize: true,
+        });
+    },
+    handler: argv => {
+      const resolver = new Resolver();
+      const dependenciesPromise = argv.recursive 
+        ? resolver.resolve(argv.contract, true)
+        : Promise.resolve([]);
+
+      return dependenciesPromise
+        .then(dependencies => {
+          Debug.context(resolver)(dependencies);
+
+          console.info(chalk.green(
+            `Detected ${ dependencies.length } dependencies in '${ argv.contract }'`
+          ));
+
+          const combine = new Combine();
+          const contracts = [].concat(dependencies);
+
+          contracts.push(path.resolve(argv.contract));
+
+          return combine.combine(contracts);
+        })
+        .then(contractData => {
+          let title = path.basename(argv.contract, '.sol');
+
+          if (argv.recursive ) {
+            title += ' (recursive)';
+          }
+
+          const profile = new Profile();
+          const contractInterface = profile.process(contractData);
+          const table = Profile.tableFromInterface(title, contractInterface).toString();
+
+          if (argv.output) {
+            Debug.context(profile)(argv.output);
+
+            return fs.writeFile(argv.output, table)
+              .then(() => {
+                console.info(chalk.green(
+                  `Successfully written ${ new Buffer(table).length } bytes into '${ argv.output }'`
+                ));
+              });
+          }
+
+          process.stdout.write(chalk.green(`\n${ table }\n\n`));
         });
     },
   })

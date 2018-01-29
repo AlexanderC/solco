@@ -24,9 +24,10 @@ solco
 Commands:
   solco visualize <contract>  Visualize contract's control flow
                                                               [aliases: viz, vz]
-  solco analyze <contract>    Analyze a contract                   [aliases: an]
+  solco analyze <contract>    Analyze a contract                [aliases: an]
   solco combine <contract>    Combine contract dependencies in one file
                                                               [aliases: com, cb]
+  solco profile <contract>    Profile a smart contract    [aliases: prof, pr]
 
 Options:
   --version   Show version number                                      [boolean]
@@ -48,10 +49,16 @@ Analyze contract:
 solco analyze ./contracts/AwesomeToken.sol
 ```
 
-Analyze contract:
+Visualize contract:
 
 ```bash
 solco visualize ./contracts/AwesomeToken.sol
+```
+
+Profile contract:
+
+```bash
+solco profile ./contracts/AwesomeToken.sol
 ```
 
 > Every command have their own `--help` containing usage information
