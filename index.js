@@ -17,6 +17,11 @@ const Visualize = require('./src/visualize');
 const graphviz2svg = require('graphviz2svg');
 const open = require('open');
 const pify = require('pify');
+const pkgDir = require('pkg-dir');
+const { execFile } = require('child_process');
+
+// @todo put it in config
+const TRUFFLE_FLATTENER_BINARY = path.join(__dirname, 'node_modules/.bin/truffle-flattener');
 
 yargs
   .command({
@@ -201,9 +206,48 @@ yargs
         .positional('contract', {
           describe: 'Path to the contract file',
           normalize: true,
+        })
+        .positional('verifyable', {
+          describe: 'Run combine in Truffle compatibility mode'
+            + ', e.g. to verify on Etherscan',
+          default: false,
+          type: 'boolean',
         });
     },
     handler: argv => {
+      if (argv.verifyable) {
+        console.info(chalk.green(
+          `Using Etherscan compatible mode for '${ argv.contract }'`
+        ));
+
+        return pkgDir(path.dirname(argv.contract))
+          .then(contractRoot => {
+            console.info(chalk.green(
+              `Detected contracts package root: '${ contractRoot }'`
+            ));
+
+            const combine = new Combine();
+            const outFile = argv.output || combine.generateOutFile(argv.contract);
+    
+            return pify(execFile)(
+              TRUFFLE_FLATTENER_BINARY,
+              [ argv.contract ],
+              { cwd: contractRoot }
+            )
+              .then(contractData => {
+                Debug.context(combine)(outFile);
+    
+                return fs.writeFile(outFile, contractData)
+                  .then(() => contractData);
+              })
+              .then(data => {
+                console.info(chalk.green(
+                  `Successfully written ${ new Buffer(data).length } bytes into '${ outFile }'`
+                ));
+              });
+          });
+      }
+
       const resolver = new Resolver();
 
       return resolver.resolve(argv.contract)

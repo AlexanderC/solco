@@ -43,6 +43,9 @@ Combine contracts:
 solco combine ./contracts/AwesomeToken.sol
 ```
 
+> To flatten the contract for verification on Etherscan use `--verifyable` option
+> to enable `Truffle` compatibility mode.
+
 Analyze contract:
 
 ```bash
