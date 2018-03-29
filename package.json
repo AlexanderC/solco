@@ -1,9 +1,8 @@
 {
   "name": "solco",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Solidity smart contracts utility",
   "main": "index.js",
-  "scripts": {},
   "bin": {
     "solco": "./index.js"
   },
